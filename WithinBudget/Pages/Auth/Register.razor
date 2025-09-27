@@ -1,0 +1,24 @@
+﻿@page "/Register"
+@inject HttpClient Http
+@inject NavigationManager Navigation
+
+<MudPaper Class="pa-4 mx-auto mt-12" Style="max-width:400px;">
+    <MudText Typo="Typo.h5">Register</MudText>
+    <MudTextField @bind-Value="_model.FirstName" Label="First Name" Required="true" FullWidth="true" />
+    <MudTextField @bind-Value="_model.LastName" Label="Last Name" Required="true" FullWidth="true" />
+    <MudTextField @bind-Value="_model.Email" Label="Email" Required="true" FullWidth="true" />
+    <MudTextField @bind-Value="_model.Password" Label="Password" InputType="InputType.Password" Required="true" FullWidth="true" />
+
+    <MudButton OnClick="AttemptRegister" Color="Color.Primary" Variant="Variant.Filled" Class="mt-4" FullWidth="true">
+        Register
+    </MudButton>
+
+    <MudText Class="mt-2">
+        Already have an account? <MudLink Href="/login">Login here</MudLink>
+    </MudText>
+
+    @if (!string.IsNullOrEmpty(_errorMessage))
+    {
+        <MudAlert Severity="Severity.Error" Class="mt-2">@_errorMessage</MudAlert>
+    }
+</MudPaper>

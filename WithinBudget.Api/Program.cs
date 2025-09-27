@@ -8,6 +8,16 @@ using WithinBudget.Api.Infrastructure.Validation;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowBlazorClient", policy =>
+    {
+        policy.WithOrigins(builder.Configuration["WithinBudgetUri"]!)
+            .AllowAnyHeader()
+            .AllowAnyMethod();
+    });
+});
+
 builder.Services.AddEndpointsApiExplorer();
 builder.AddSwaggerGen();
 builder.Services.AddControllers(options =>
@@ -39,6 +49,8 @@ await using (var scope = app.Services.CreateAsyncScope())
     var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
     await db.Database.EnsureCreatedAsync();
 }
+
+app.UseCors("AllowBlazorClient");
 
 app.UseHttpsRedirection();
 app.UseRouting();

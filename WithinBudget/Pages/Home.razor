@@ -1,7 +1,39 @@
-﻿@page "/"
+﻿@page "/Profile"
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Components.Authorization
+@attribute [Authorize]
 
-<PageTitle>Home</PageTitle>
+<AuthorizeView>
+    <Authorized>
+        <MudPaper class="pa-4">
+            <h3>Profile</h3>
+            <p>Email: @_userEmail</p>
+            <p>UserId: @_userId</p>
+        </MudPaper>
+    </Authorized>
+    <NotAuthorized>
+        <MudAlert Severity="Severity.Warning">
+            You must be logged in to view this page
+        </MudAlert>
+    </NotAuthorized>
+</AuthorizeView>
 
-<h1>Hello, world!</h1>
+@code{
 
-Welcome to your new app.
+    [CascadingParameter] private Task<AuthenticationState> AuthenticationStateTask { get; set; } = null!;
+
+    private string? _userEmail;
+    private string? _userId;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthenticationStateTask;
+        var user = authState.User;
+
+        if (user.Identity?.IsAuthenticated == true)
+        {
+            _userEmail = user.FindFirst(x => x.Type == "email")?.Value;
+            _userId    = user.FindFirst(x => x.Type == "sub")?.Value;
+        }
+    }
+}

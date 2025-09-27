@@ -7,8 +7,17 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="Blazored.LocalStorage" Version="4.5.0" />
+        <PackageReference Include="Microsoft.AspNetCore.Authorization" Version="8.0.20" />
+        <PackageReference Include="Microsoft.AspNetCore.Components.Authorization" Version="8.0.20" />
         <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="8.0.20" />
         <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="8.0.20" PrivateAssets="all" />
+        <PackageReference Include="Microsoft.Extensions.Http" Version="8.0.1" />
+        <PackageReference Include="MudBlazor" Version="8.12.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\WithinBudget.Shared\WithinBudget.Shared.csproj" />
     </ItemGroup>
 
 </Project>
