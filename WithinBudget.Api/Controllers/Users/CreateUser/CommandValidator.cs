@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 using WithinBudget.Api.Infrastructure.Validation;
 
-namespace WithinBudget.Api.Controllers.CreateUser;
+namespace WithinBudget.Api.Controllers.Users.CreateUser;
 
 public class CommandValidator : AbstractValidator<CommandCriteria>
 {

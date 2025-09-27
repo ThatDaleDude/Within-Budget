@@ -1,16 +1,15 @@
 using FluentValidation;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using WithinBudget.Api.Controllers.CreateUser;
+using WithinBudget.Api.Controllers.Users.CreateUser;
 using WithinBudget.Api.Data;
-using WithinBudget.Api.Data.Entities;
+using WithinBudget.Api.Infrastructure.ApplicationBuilderExtensions;
 using WithinBudget.Api.Infrastructure.Validation;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.AddSwaggerGen();
 builder.Services.AddControllers(options =>
 {
     options.Filters.Add<ValidationFilter<CommandCriteria>>();
@@ -24,12 +23,7 @@ builder.Services.AddValidatorsFromAssemblyContaining<CommandValidator>();
 
 builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-builder.Services.AddIdentity<User, IdentityRole<Guid>>(options =>
-    {
-        options.Password.RequiredLength   = 8;
-    })
-    .AddEntityFrameworkStores<ApplicationDbContext>()
-    .AddDefaultTokenProviders();
+builder.AddAuthentication();
 
 var app = builder.Build();
 
@@ -47,6 +41,9 @@ await using (var scope = app.Services.CreateAsyncScope())
 }
 
 app.UseHttpsRedirection();
+app.UseRouting();
+app.UseAuthentication();
+app.UseAuthorization();
 app.MapControllers();
 
 app.Run();

@@ -1,4 +1,4 @@
-﻿namespace WithinBudget.Api.Controllers.CreateUser;
+﻿namespace WithinBudget.Api.Controllers.Users.CreateUser;
 
 public class CommandCriteria
 {
