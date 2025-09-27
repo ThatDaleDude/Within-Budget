@@ -1,16 +1,17 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using WithinBudget.Api.Data.Entities;
 
 namespace WithinBudget.Api.Controllers.Users.CreateUser;
 
 [ApiController]
 [Route("user")]
-public class CreateUser(UserManager<Data.Entities.User> userManager) : ControllerBase
+public class CreateUser(UserManager<User> userManager) : ControllerBase
 {
     [HttpPost("create")]
     public async Task<IActionResult> PostAsync([FromBody] CommandCriteria command)
     {
-        var user = new Data.Entities.User
+        var user = new User
         {
             Email     = command.Email,
             UserName  = command.Email,
