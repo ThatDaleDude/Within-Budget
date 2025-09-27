@@ -9,13 +9,8 @@ namespace WithinBudget.Api.Controllers.CreateUser;
 public class CreateUser(UserManager<User> userManager) : ControllerBase
 {
     [HttpPost("create")]
-    public async Task<IActionResult> PostAsync([FromBody] CommandCriteria command, CancellationToken cancellationToken)
+    public async Task<IActionResult> PostAsync([FromBody] CommandCriteria command)
     {
-        if (!ModelState.IsValid)
-        {
-            return BadRequest(ModelState);
-        }
-
         var user = new User
         {
             Email     = command.Email,

@@ -1,5 +1,6 @@
 using FluentValidation;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WithinBudget.Api.Controllers.CreateUser;
 using WithinBudget.Api.Data;
@@ -13,6 +14,10 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddControllers(options =>
 {
     options.Filters.Add<ValidationFilter<CommandCriteria>>();
+})
+.ConfigureApiBehaviorOptions(options =>
+{
+    options.InvalidModelStateResponseFactory = context => new BadRequestObjectResult(context.ModelState);
 });
 
 builder.Services.AddValidatorsFromAssemblyContaining<CommandValidator>();
