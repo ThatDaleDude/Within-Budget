@@ -2,7 +2,7 @@
 
 namespace WithinBudget.Api.Infrastructure.Validation;
 
-public static class ValidPasswordValidator
+public static class PasswordValidator
 {
     public static void ValidPassword<T>(this IRuleBuilder<T, string> ruleBuilder) =>
         ruleBuilder
