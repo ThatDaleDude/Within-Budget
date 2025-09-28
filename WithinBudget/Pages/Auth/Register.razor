@@ -1,4 +1,5 @@
 ﻿@page "/Register"
+@using WithinBudget.Components
 @inject HttpClient Http
 @inject NavigationManager Navigation
 
@@ -20,27 +21,5 @@
 
 @if (_errorMessages.Errors.Any())
 {
-    <MudPaper Class="pa-4 mx-auto mt-5 paper-error" Style="max-width:600px;">
-        @foreach (var errorKvp in _errorMessages.Errors)
-        {
-            <div class="row">
-                <div class="col">
-                    <MudText><strong>@errorKvp.Key</strong></MudText>
-                </div>
-            </div>
-            
-            <div class="row">
-                <div class="col">
-                    <ul class="mb-0">
-                        @foreach (var error in errorKvp.Value)
-                        {
-                            <li>
-                                <MudText>@error</MudText>
-                            </li>
-                        }
-                    </ul>
-                </div>
-            </div>
-        }
-    </MudPaper>
+    <ApiErrorCard ApiError="_errorMessages" />
 }
