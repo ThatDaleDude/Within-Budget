@@ -21,8 +21,14 @@ public class LogInUser(UserManager<User> userManager, IConfiguration config) : C
 
         var isPasswordValid = await userManager.CheckPasswordAsync(user, command.Password);
         
+        if (await userManager.IsLockedOutAsync(user))
+        {
+            return Unauthorized("User is temporarily locked out.");
+        }
+        
         if (!isPasswordValid)
         {
+            await userManager.AccessFailedAsync(user);
             return Unauthorized("Invalid email or password.");
         }
 
