@@ -1,34 +1,47 @@
 ﻿using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using WithinBudget.Shared;
 
 namespace WithinBudget.Api.Infrastructure.Validation;
 
-public class ValidationFilter<T>(IValidator<T> validator) : IAsyncActionFilter
-    where T : class
+public class ValidationFilter(IServiceProvider provider) : IAsyncActionFilter
 {
     public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
     {
-        var argument = context.ActionArguments.Values.OfType<T>().FirstOrDefault();
 
-        if (argument == null)
+        foreach (var arg in context.ActionArguments.Values)
         {
-            await next();
-            return;
-        }
+            if (arg == null) continue;
 
-        var result = await validator.ValidateAsync(argument);
+            var validatorType = typeof(IValidator<>).MakeGenericType(arg.GetType());
+            var validator = provider.GetService(validatorType);
 
-        if (!result.IsValid)
-        {
+            if (validator is not IValidator validatorObj)
+            {
+                continue;
+            }
+            
+            
+            var validationContext = new ValidationContext<object>(arg);
+            var result = await validatorObj.ValidateAsync(validationContext);
+
+            if (result.IsValid)
+            {
+                continue;
+            }
+            
             var errors = result.Errors
-                .GroupBy(x => x.PropertyName)
-                .ToDictionary(x => x.Key, x => x.Select(y => y.ErrorMessage).ToArray());
+                .GroupBy(e => e.PropertyName)
+                .ToDictionary(
+                    g => g.Key,
+                    g => g.Select(e => e.ErrorMessage).ToArray()
+                );
 
-            context.Result = new BadRequestObjectResult(new { errors });
+            context.Result = new BadRequestObjectResult(new ApiError { Errors = errors });
             return;
         }
-        
+
         await next();
     }
 }
