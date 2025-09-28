@@ -6,7 +6,7 @@
 @inject ILocalStorageService LocalStorage
 
 @* Required *@
-<MudThemeProvider />
+<MudThemeProvider @ref="_mudThemeProvider" @bind-IsDarkMode="_isDarkMode" />
 <MudPopoverProvider />
 
 @* Needed for dialogs *@
@@ -30,6 +30,10 @@
                 <MudNavLink Href="/Register" Icon="@Icons.Material.Filled.PersonAdd">Register</MudNavLink>
             }
         </MudNavMenu>
+        
+        <div class="mt-auto p-2">
+            <MudSwitch T="bool" @bind-Value="_isDarkMode" Color="Color.Primary" Label="Dark Mode" />
+        </div>
     </MudDrawer>
 
     <!-- Top App Bar -->
@@ -49,11 +53,24 @@
 @code {
     private bool _drawerOpen = true;
     private bool _isAuthenticated;
+    private bool _isDarkMode;
+    private MudThemeProvider _mudThemeProvider = null!;
 
     protected override async Task OnInitializedAsync()
     {
         var authState = await AuthStateProvider.GetAuthenticationStateAsync();
         _isAuthenticated = authState.User.Identity?.IsAuthenticated ?? false;
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (!firstRender)
+        {
+            return;
+        }
+        
+        _isDarkMode = await _mudThemeProvider.GetSystemDarkModeAsync();
+        StateHasChanged();
     }
 
     private void ToggleDrawer()
