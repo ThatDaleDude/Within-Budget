@@ -7,6 +7,8 @@ public class CommandValidator : AbstractValidator<CommandCriteria>
     public CommandValidator()
     {
         RuleFor(x => x.Email)
+            .NotEmpty()
+            .WithMessage("Email address is required.")
             .EmailAddress()
             .WithMessage("Please enter a valid email address.");
         

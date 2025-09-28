@@ -20,9 +20,12 @@ builder.Services.AddCors(options =>
 
 builder.Services.AddEndpointsApiExplorer();
 builder.AddSwaggerGen();
+
+builder.Services.AddScoped<ValidationFilter>();
+
 builder.Services.AddControllers(options =>
 {
-    options.Filters.Add<ValidationFilter<CommandCriteria>>();
+    options.Filters.Add<ValidationFilter>();
 })
 .ConfigureApiBehaviorOptions(options =>
 {
