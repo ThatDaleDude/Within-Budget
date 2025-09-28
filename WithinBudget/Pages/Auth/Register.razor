@@ -2,7 +2,7 @@
 @inject HttpClient Http
 @inject NavigationManager Navigation
 
-<MudPaper Class="pa-4 mx-auto mt-12" Style="max-width:400px;">
+<MudPaper Class="pa-4 mx-auto mt-12 border" Style="max-width:400px;">
     <MudText Typo="Typo.h5">Register</MudText>
     <MudTextField @bind-Value="_model.FirstName" Label="First Name" Required="true" FullWidth="true" />
     <MudTextField @bind-Value="_model.LastName" Label="Last Name" Required="true" FullWidth="true" />
@@ -16,9 +16,31 @@
     <MudText Class="mt-2">
         Already have an account? <MudLink Href="/login">Login here</MudLink>
     </MudText>
-
-    @if (!string.IsNullOrEmpty(_errorMessage))
-    {
-        <MudAlert Severity="Severity.Error" Class="mt-2">@_errorMessage</MudAlert>
-    }
 </MudPaper>
+
+@if (_errorMessages.Errors.Any())
+{
+    <MudPaper Class="pa-4 mx-auto mt-5 paper-error" Style="max-width:600px;">
+        @foreach (var errorKvp in _errorMessages.Errors)
+        {
+            <div class="row">
+                <div class="col">
+                    <MudText><strong>@errorKvp.Key</strong></MudText>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col">
+                    <ul>
+                        @foreach (var error in errorKvp.Value)
+                        {
+                            <li>
+                                <MudText>@error</MudText>
+                            </li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        }
+    </MudPaper>
+}

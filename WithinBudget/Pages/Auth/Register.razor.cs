@@ -1,4 +1,5 @@
 ﻿using System.Net.Http.Json;
+using System.Text.Json;
 using Microsoft.AspNetCore.Components;
 using WithinBudget.Shared;
 
@@ -7,21 +8,36 @@ namespace WithinBudget.Pages.Auth;
 public partial class Register : ComponentBase
 {
     private readonly RegisterModel _model = new();
-    private string _errorMessage = "";
+    private ApiError _errorMessages = new();
 
     private async Task AttemptRegister()
     {
-        _errorMessage = string.Empty;
-
         var response = await Http.PostAsJsonAsync("/user/create", _model);
 
         if (response.IsSuccessStatusCode)
         {
             Navigation.NavigateTo("/login");
+            return;
         }
-        else
+        
+        var content = await response.Content.ReadAsStreamAsync();
+
+        try
         {
-            _errorMessage = "Registration failed.";
+            var errors = await JsonSerializer.DeserializeAsync<ApiError>(content,
+                new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+
+            _errorMessages = errors ?? new ApiError();
+        }
+        catch
+        {
+            _errorMessages = new ApiError
+            {
+                Errors = new Dictionary<string, string[]>
+                {
+                    { "General", ["An unknown error occurred"] }
+                }
+            };
         }
     }
 }
