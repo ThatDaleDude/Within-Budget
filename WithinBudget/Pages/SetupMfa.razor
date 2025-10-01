@@ -1,12 +1,69 @@
 @page "/SetupMfa"
 @using Microsoft.AspNetCore.Authorization
 @attribute [Authorize]
-@inject HttpClient Http
-@inject NavigationManager Navigation
 
-<h3>Setup MFA</h3>
+<MudContainer Class="mt-4">
+    <MudText Typo="Typo.h4" Class="mb-4">Settings</MudText>
 
-@if (!string.IsNullOrEmpty(_mfaResponse?.QrCode))
-{
-    <img src="@_mfaResponse.QrCode" alt="QR Code" style="width:200px; height:200px;" />
-}
+    <MudText Typo="Typo.h5" Class="mb-3">Setup MFA</MudText>
+    
+    <div class="row">
+        <div class="col">
+            <MudText Typo="Typo.body1">Click the button below to generate your QR code.</MudText>
+        </div>
+    </div>
+    
+    <div class="row mt-3">
+        <div class="col">
+            <MudButton OnClick="GenerateQrCode" Color="Color.Primary" Variant="Variant.Filled">Generate QR Code</MudButton>
+        </div>
+    </div>
+    
+    @if (!string.IsNullOrEmpty(_mfaResponse?.QrCode))
+    {
+        <div class="row mt-3">
+            <div class="col">
+                <img src="@_mfaResponse.QrCode" alt="QR Code" style="width:200px; height:200px;" />
+            </div>
+        </div>
+        
+        <div class="row mt-3">
+            <div class="col">
+                <MudText Typo="Typo.body1">Scan the QR code with your authenticator app and enter the one-time password.</MudText>
+            </div>
+        </div>
+        
+        <div class="row mt-3">
+            <div class="col-4">
+                <MudTextField Required="true" RequiredError="Please enter the OTP code" Label="Code" @bind-Value="@_otpCode" />
+            </div>
+        </div>
+        
+        <div class="row mt-3">
+            <div class="col">
+                <MudButton OnClick="VerifyMfa" Color="Color.Primary" Variant="Variant.Filled">Verify</MudButton>
+            </div>
+        </div>
+        
+        @if (_verified)
+        {
+            <div class="row mt-3">
+                <div class="col">
+                    <MudText Typo="Typo.body1">
+                        <span>MFA is now enabled.</span>
+                    </MudText>
+                </div>
+            </div>
+        }
+        else if (_confirmationError != null)
+        {
+            <div class="row mt-3">
+                <div class="col">
+                    <MudText Typo="Typo.body1">
+                        @_confirmationError
+                    </MudText>
+                </div>
+            </div>
+        }
+    }
+</MudContainer>

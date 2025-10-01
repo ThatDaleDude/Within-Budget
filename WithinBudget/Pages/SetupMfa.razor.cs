@@ -8,9 +8,14 @@ namespace WithinBudget.Pages;
 public partial class SetupMfa : ComponentBase
 {
     [CascadingParameter] private Task<AuthenticationState> AuthenticationStateTask { get; set; } = null!;
-    private SetupMfaResponse? _mfaResponse;
+    [Inject] private HttpClient Http { get; set; } = null!;
     
-    protected override async Task OnInitializedAsync()
+    private SetupMfaResponse? _mfaResponse;
+    private string _otpCode = "";
+    private string? _confirmationError;
+    private bool _verified;
+    
+    private async Task GenerateQrCode()
     {
         var authState = await AuthenticationStateTask;
         var user = authState.User;
@@ -29,5 +34,24 @@ public partial class SetupMfa : ComponentBase
         }
         
         _mfaResponse = await response.Content.ReadFromJsonAsync<SetupMfaResponse>();
+    }
+
+    private async Task VerifyMfa()
+    {
+        if (string.IsNullOrWhiteSpace(_otpCode))
+        {
+            return;
+        }
+
+        var response = await Http.PostAsync($"mfa/confirm/{_otpCode}", null);
+
+        if (response.IsSuccessStatusCode)
+        {
+            _verified = true;
+            return;
+        }
+        
+        var apiError = await response.Content.ReadFromJsonAsync<ApiError>();
+        _confirmationError = apiError?.Error;
     }
 }
