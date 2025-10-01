@@ -17,7 +17,7 @@ public partial class Login : ComponentBase
     
     private readonly LoginModel _model = new();
     private Dictionary<string, string[]> _errorMessages = new();
-
+    private bool _showPassword;
 
     private async Task AttemptLogin()
     {
@@ -52,4 +52,6 @@ public partial class Login : ComponentBase
             };
         }
     }
+    
+    private void TogglePasswordVisibility() => _showPassword = !_showPassword;
 }

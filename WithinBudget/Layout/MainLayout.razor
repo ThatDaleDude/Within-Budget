@@ -22,6 +22,7 @@
             @if (_isAuthenticated)
             {
                 <MudNavLink Href="/Profile" Icon="@Icons.Material.Filled.Home">Home</MudNavLink>
+                <MudNavLink Href="/Settings" Icon="@Icons.Material.Filled.Settings">Settings</MudNavLink>
                 <MudNavLink OnClick="Logout" Icon="@Icons.Material.Filled.Logout">Logout</MudNavLink>
             }
             else
@@ -32,8 +33,6 @@
         </MudNavMenu>
         
         <div class="mt-auto p-2" style="display: flex; align-items: center;">
-            <MudNavLink Href="/Settings" Icon="@Icons.Material.Filled.Settings">Settings</MudNavLink>
-            
             <MudTooltip Text="Toggle dark mode">
                 <MudIconButton
                     Icon="@(_isDarkMode ? Icons.Material.Filled.DarkMode : Icons.Material.Filled.LightMode)"
