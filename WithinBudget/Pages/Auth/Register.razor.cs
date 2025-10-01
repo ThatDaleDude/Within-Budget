@@ -8,7 +8,8 @@ namespace WithinBudget.Pages.Auth;
 public partial class Register : ComponentBase
 {
     private readonly RegisterModel _model = new();
-    private ApiError _errorMessages = new();private bool _showPassword;
+    private ApiError _errorMessages = new();
+    private bool _showPassword;
 
     private async Task AttemptRegister()
     {
