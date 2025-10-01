@@ -19,6 +19,17 @@ public partial class Login : ComponentBase
     private Dictionary<string, string[]> _errorMessages = new();
     private bool _showPassword;
 
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+
+        if (user.Identity?.IsAuthenticated == true)
+        {
+            Navigation.NavigateTo("/Profile");
+        }
+    }
+
     private async Task AttemptLogin()
     {
         var response = await Http.PostAsJsonAsync("/user/login", _model);
