@@ -8,14 +8,23 @@
     <MudTextField @bind-Value="_model.FirstName" Label="First Name" Required="true" FullWidth="true" />
     <MudTextField @bind-Value="_model.LastName" Label="Last Name" Required="true" FullWidth="true" />
     <MudTextField @bind-Value="_model.Email" Label="Email" Required="true" FullWidth="true" />
-    <MudTextField @bind-Value="_model.Password" Label="Password" InputType="InputType.Password" Required="true" FullWidth="true" />
+    <MudTextField 
+        @bind-Value="_model.Password" 
+        Label="Password" 
+        InputType="@(_showPassword ? InputType.Text : InputType.Password)" 
+        Required="true" 
+        FullWidth="true"
+        Adornment="Adornment.End"
+        AdornmentIcon="@(_showPassword ? Icons.Material.Filled.Visibility : Icons.Material.Filled.VisibilityOff)"
+        OnAdornmentClick="TogglePasswordVisibility"
+    />
 
     <MudButton OnClick="AttemptRegister" Color="Color.Primary" Variant="Variant.Filled" Class="mt-4" FullWidth="true">
         Register
     </MudButton>
 
     <MudText Class="mt-2">
-        Already have an account? <MudLink Href="/login">Login here</MudLink>
+        Already have an account? <MudLink Href="/">Login here</MudLink>
     </MudText>
 </MudPaper>
 

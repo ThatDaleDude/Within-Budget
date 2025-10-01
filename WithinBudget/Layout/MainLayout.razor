@@ -31,8 +31,22 @@
             }
         </MudNavMenu>
         
-        <div class="mt-auto p-2">
-            <MudSwitch T="bool" @bind-Value="_isDarkMode" Color="Color.Primary" Label="Dark Mode" />
+        <div class="mt-auto p-2" style="display: flex; align-items: center;">
+            <MudTooltip Text="Toggle dark mode">
+                <MudIconButton 
+                    Icon="@(_isDarkMode ? Icons.Material.Filled.DarkMode : Icons.Material.Filled.LightMode)"
+                    Color="Color.Primary"
+                    OnClick="ToggleDarkMode"
+                    Size="Size.Medium"
+                    Edge="Edge.End"
+                />
+            </MudTooltip>
+            @if (_drawerOpen)
+            {
+                <span @onclick="ToggleDarkMode" class="mud-nav-link-text" style="margin-left: 12px; cursor: pointer;">
+                    Toggle theme
+                </span>
+            }
         </div>
     </MudDrawer>
 
@@ -73,10 +87,9 @@
         StateHasChanged();
     }
 
-    private void ToggleDrawer()
-    {
-        _drawerOpen = !_drawerOpen;
-    }
+    private void ToggleDrawer() => _drawerOpen = !_drawerOpen;
+
+    private void ToggleDarkMode() => _isDarkMode = !_isDarkMode;
 
     private void Logout()
     {

@@ -7,7 +7,7 @@
 @inject AuthenticationStateProvider AuthStateProvider
 @inject NavigationManager Navigation
 
-<MudPaper Class="pa-4 mx-auto mt-12" Style="max-width:400px;">
+<MudPaper Class="pa-4 mx-auto mt-12 border" Style="max-width:400px;">
     <MudText Typo="Typo.h5">Login</MudText>
     <MudTextField @bind-Value="_model.Email" Label="Email" Required="true" FullWidth="true" />
     <MudTextField @bind-Value="_model.Password" Label="Password" InputType="InputType.Password" Required="true" FullWidth="true" />

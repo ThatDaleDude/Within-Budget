@@ -8,7 +8,7 @@ namespace WithinBudget.Pages.Auth;
 public partial class Register : ComponentBase
 {
     private readonly RegisterModel _model = new();
-    private ApiError _errorMessages = new();
+    private ApiError _errorMessages = new();private bool _showPassword;
 
     private async Task AttemptRegister()
     {
@@ -16,7 +16,7 @@ public partial class Register : ComponentBase
 
         if (response.IsSuccessStatusCode)
         {
-            Navigation.NavigateTo("/login");
+            Navigation.NavigateTo("/");
             return;
         }
         
@@ -40,4 +40,6 @@ public partial class Register : ComponentBase
             };
         }
     }
+    
+    private void TogglePasswordVisibility() => _showPassword = !_showPassword;
 }
