@@ -1,24 +1,15 @@
 ﻿@page "/Profile"
+@attribute [Authorize]
 @using Microsoft.AspNetCore.Authorization
 @using Microsoft.AspNetCore.Components.Authorization
-@attribute [Authorize]
 
-<AuthorizeView>
-    <Authorized>
-        <MudPaper class="pa-4">
-            <h3>Profile</h3>
-            <p>Email: @_userEmail</p>
-            <p>UserId: @_userId</p>
+<MudPaper class="pa-4">
+    <h3>Profile</h3>
+    <p>Email: @_userEmail</p>
+    <p>UserId: @_userId</p>
             
-            <MudButton Color="Color.Primary" Href="/SetupMfa">Setup MFA</MudButton>
-        </MudPaper>
-    </Authorized>
-    <NotAuthorized>
-        <MudAlert Severity="Severity.Warning">
-            You must be logged in to view this page
-        </MudAlert>
-    </NotAuthorized>
-</AuthorizeView>
+    <MudButton Color="Color.Primary" Href="/SetupMfa">Setup MFA</MudButton>
+</MudPaper>
 
 @code{
 

@@ -8,7 +8,7 @@ namespace WithinBudget.Pages.Auth;
 public partial class Register : ComponentBase
 {
     private readonly RegisterModel _model = new();
-    private ApiError _errorMessages = new();
+    private Dictionary<string, string[]> _errorMessages = new();
     private bool _showPassword;
 
     private async Task AttemptRegister()
@@ -25,19 +25,16 @@ public partial class Register : ComponentBase
 
         try
         {
-            var errors = await JsonSerializer.DeserializeAsync<ApiError>(content,
+            var apiError = await JsonSerializer.DeserializeAsync<ApiError>(content,
                 new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
 
-            _errorMessages = errors ?? new ApiError();
+            _errorMessages = apiError?.Errors ?? [];
         }
         catch
         {
-            _errorMessages = new ApiError
+            _errorMessages = new Dictionary<string, string[]>
             {
-                Errors = new Dictionary<string, string[]>
-                {
-                    { "General", ["An unknown error occurred"] }
-                }
+                { "", ["An unknown error occurred"] }
             };
         }
     }

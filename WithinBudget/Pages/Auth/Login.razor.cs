@@ -1,6 +1,8 @@
 ﻿using System.Net.Http.Json;
 using System.Text.Json;
+using Blazored.LocalStorage;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Authorization;
 using WithinBudget.Infrastructure;
 using WithinBudget.Shared;
 
@@ -8,8 +10,13 @@ namespace WithinBudget.Pages.Auth;
 
 public partial class Login : ComponentBase
 {
+    [Inject] private HttpClient Http { get; set; } = null!;
+    [Inject] private ILocalStorageService LocalStorage { get; set; } = null!;
+    [Inject] private AuthenticationStateProvider AuthStateProvider { get; set; } = null!;
+    [Inject] private NavigationManager Navigation { get; set; } = null!;
+    
     private readonly LoginModel _model = new();
-    private ApiError _errorMessages = new();
+    private Dictionary<string, string[]> _errorMessages = new();
 
 
     private async Task AttemptLogin()
@@ -32,19 +39,16 @@ public partial class Login : ComponentBase
 
         try
         {
-            var errors = JsonSerializer.Deserialize<ApiError>(content,
+            var apiError = JsonSerializer.Deserialize<ApiError>(content,
                 new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
             
-            _errorMessages = errors ?? new ApiError();
+            _errorMessages = apiError?.Errors ?? [];
         }
         catch (JsonException)
         {
-            _errorMessages = new ApiError
+            _errorMessages = new Dictionary<string, string[]>
             {
-                Errors = new Dictionary<string, string[]>
-                {
-                    { "", [content] }
-                }
+                { "", [content] }
             };
         }
     }

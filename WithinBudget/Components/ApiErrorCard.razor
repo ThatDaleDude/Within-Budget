@@ -1,5 +1,5 @@
 ﻿<MudPaper Class="pa-4 mx-auto mt-5 paper-error" Style="max-width:600px;">
-    @foreach (var errorKvp in ApiError.Errors)
+    @foreach (var errorKvp in Errors)
     {
         @if (!string.IsNullOrEmpty(errorKvp.Key))
         {

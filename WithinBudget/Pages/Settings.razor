@@ -1,0 +1,216 @@
+﻿@page "/Settings"
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize]
+
+<MudContainer Class="mt-4">
+    <MudText Typo="Typo.h4" Class="mb-4">Settings</MudText>
+
+    <MudText Typo="Typo.h5" Class="mb-3">Account Settings</MudText>
+    <MudGrid>
+        <MudItem xs="12" sm="6" md="3">
+            <MudCard Elevation="3" Class="h-100">
+                <MudCardContent Class="d-flex">
+                    <div style="flex: 1; max-width: 33%;" class="d-flex justify-center align-center mr-3">
+                        <MudIcon Icon="@Icons.Material.Filled.Person" Color="Color.Primary" Size="Size.Large" />
+                    </div>
+                    <div style="flex: 2;">
+                        <MudText Typo="Typo.h6">Profile</MudText>
+                        <MudText Typo="Typo.body2">Manage your personal information and account settings</MudText>
+                    </div>
+                </MudCardContent>
+                <MudCardActions>
+                    <MudButton Variant="Variant.Text" Color="Color.Primary">Edit</MudButton>
+                </MudCardActions>
+            </MudCard>
+        </MudItem>
+        <MudItem xs="12" sm="6" md="3">
+            <MudCard Elevation="3" Class="h-100">
+                <MudCardContent Class="d-flex">
+                    <div style="flex: 1; max-width: 33%;" class="d-flex justify-center align-center mr-3">
+                        <MudIcon Icon="@Icons.Material.Filled.Notifications" Color="Color.Secondary" Size="Size.Large" />
+                    </div>
+                    <div style="flex: 2;">
+                        <MudText Typo="Typo.h6">Notifications</MudText>
+                        <MudText Typo="Typo.body2">Control which notifications you receive</MudText>
+                    </div>
+                </MudCardContent>
+                <MudCardActions>
+                    <MudButton Variant="Variant.Text" Color="Color.Secondary">Configure</MudButton>
+                </MudCardActions>
+            </MudCard>
+        </MudItem>
+        <MudItem xs="12" sm="6" md="3">
+            <MudCard Elevation="3" Class="h-100">
+                <MudCardContent Class="d-flex">
+                    <div style="flex: 1; max-width: 33%;" class="d-flex justify-center align-center mr-3">
+                        <MudIcon Icon="@Icons.Material.Filled.Security" Color="Color.Error" Size="Size.Large" />
+                    </div>
+                    <div style="flex: 2;">
+                        <MudText Typo="Typo.h6">Security</MudText>
+                        <MudText Typo="Typo.body2">Manage your password and security preferences</MudText>
+                    </div>
+                </MudCardContent>
+                <MudCardActions>
+                    <MudButton Variant="Variant.Text" Color="Color.Error">Manage</MudButton>
+                </MudCardActions>
+            </MudCard>
+        </MudItem>
+        <MudItem xs="12" sm="6" md="3">
+            <MudCard Elevation="3" Class="h-100">
+                <MudCardContent Class="d-flex">
+                    <div style="flex: 1; max-width: 33%;" class="d-flex justify-center align-center mr-3">
+                        <MudIcon Icon="@Icons.Material.Filled.Language" Color="Color.Info" Size="Size.Large" />
+                    </div>
+                    <div style="flex: 2;">
+                        <MudText Typo="Typo.h6">Language</MudText>
+                        <MudText Typo="Typo.body2">Choose your preferred language and region</MudText>
+                    </div>
+                </MudCardContent>
+                <MudCardActions>
+                    <MudButton Variant="Variant.Text" Color="Color.Info">Select</MudButton>
+                </MudCardActions>
+            </MudCard>
+        </MudItem>
+    </MudGrid>
+
+    <MudDivider Class="my-4" />
+
+    <MudText Typo="Typo.h5" Class="mb-3">Budget Settings</MudText>
+    <MudGrid>
+        <MudItem xs="12" sm="6" md="3">
+            <MudCard Elevation="3" Class="h-100">
+                <MudCardContent Class="d-flex">
+                    <div style="flex: 1; max-width: 33%;" class="d-flex justify-center align-center mr-3">
+                        <MudIcon Icon="@Icons.Material.Filled.AttachMoney" Color="Color.Success" Size="Size.Large" />
+                    </div>
+                    <div style="flex: 2;">
+                        <MudText Typo="Typo.h6">Currency</MudText>
+                        <MudText Typo="Typo.body2">Set your default currency and formatting</MudText>
+                    </div>
+                </MudCardContent>
+                <MudCardActions>
+                    <MudButton Variant="Variant.Text" Color="Color.Success">Change</MudButton>
+                </MudCardActions>
+            </MudCard>
+        </MudItem>
+        <MudItem xs="12" sm="6" md="3">
+            <MudCard Elevation="3" Class="h-100">
+                <MudCardContent Class="d-flex">
+                    <div style="flex: 1; max-width: 33%;" class="d-flex justify-center align-center mr-3">
+                        <MudIcon Icon="@Icons.Material.Filled.Category" Color="Color.Warning" Size="Size.Large" />
+                    </div>
+                    <div style="flex: 2;">
+                        <MudText Typo="Typo.h6">Categories</MudText>
+                        <MudText Typo="Typo.body2">Manage your expense and income categories</MudText>
+                    </div>
+                </MudCardContent>
+                <MudCardActions>
+                    <MudButton Variant="Variant.Text" Color="Color.Warning">Customize</MudButton>
+                </MudCardActions>
+            </MudCard>
+        </MudItem>
+        <MudItem xs="12" sm="6" md="3">
+            <MudCard Elevation="3" Class="h-100">
+                <MudCardContent Class="d-flex">
+                    <div style="flex: 1; max-width: 33%;" class="d-flex justify-center align-center mr-3">
+                        <MudIcon Icon="@Icons.Material.Filled.CalendarToday" Color="Color.Primary" Size="Size.Large" />
+                    </div>
+                    <div style="flex: 2;">
+                        <MudText Typo="Typo.h6">Budget Period</MudText>
+                        <MudText Typo="Typo.body2">Set your preferred budget cycle period</MudText>
+                    </div>
+                </MudCardContent>
+                <MudCardActions>
+                    <MudButton Variant="Variant.Text" Color="Color.Primary">Set</MudButton>
+                </MudCardActions>
+            </MudCard>
+        </MudItem>
+        <MudItem xs="12" sm="6" md="3">
+            <MudCard Elevation="3" Class="h-100">
+                <MudCardContent Class="d-flex">
+                    <div style="flex: 1; max-width: 33%;" class="d-flex justify-center align-center mr-3">
+                        <MudIcon Icon="@Icons.Material.Filled.Savings" Color="Color.Secondary" Size="Size.Large" />
+                    </div>
+                    <div style="flex: 2;">
+                        <MudText Typo="Typo.h6">Savings Goals</MudText>
+                        <MudText Typo="Typo.body2">Configure your savings targets and reminders</MudText>
+                    </div>
+                </MudCardContent>
+                <MudCardActions>
+                    <MudButton Variant="Variant.Text" Color="Color.Secondary">Configure</MudButton>
+                </MudCardActions>
+            </MudCard>
+        </MudItem>
+    </MudGrid>
+
+    <MudDivider Class="my-4" />
+
+    <MudText Typo="Typo.h5" Class="mb-3">Display Settings</MudText>
+    <MudGrid>
+        <MudItem xs="12" sm="6" md="3">
+            <MudCard Elevation="3" Class="h-100">
+                <MudCardContent Class="d-flex">
+                    <div style="flex: 1; max-width: 33%;" class="d-flex justify-center align-center mr-3">
+                        <MudIcon Icon="@Icons.Material.Filled.DarkMode" Color="Color.Dark" Size="Size.Large" />
+                    </div>
+                    <div style="flex: 2;">
+                        <MudText Typo="Typo.h6">Theme</MudText>
+                        <MudText Typo="Typo.body2">Choose between light, dark, or system theme</MudText>
+                    </div>
+                </MudCardContent>
+                <MudCardActions>
+                    <MudButton Variant="Variant.Text" Color="Color.Dark">Switch</MudButton>
+                </MudCardActions>
+            </MudCard>
+        </MudItem>
+        <MudItem xs="12" sm="6" md="3">
+            <MudCard Elevation="3" Class="h-100">
+                <MudCardContent Class="d-flex">
+                    <div style="flex: 1; max-width: 33%;" class="d-flex justify-center align-center mr-3">
+                        <MudIcon Icon="@Icons.Material.Filled.FormatSize" Color="Color.Info" Size="Size.Large" />
+                    </div>
+                    <div style="flex: 2;">
+                        <MudText Typo="Typo.h6">Font Size</MudText>
+                        <MudText Typo="Typo.body2">Adjust the text size throughout the application</MudText>
+                    </div>
+                </MudCardContent>
+                <MudCardActions>
+                    <MudButton Variant="Variant.Text" Color="Color.Info">Adjust</MudButton>
+                </MudCardActions>
+            </MudCard>
+        </MudItem>
+        <MudItem xs="12" sm="6" md="3">
+            <MudCard Elevation="3" Class="h-100">
+                <MudCardContent Class="d-flex">
+                    <div style="flex: 1; max-width: 33%;" class="d-flex justify-center align-center mr-3">
+                        <MudIcon Icon="@Icons.Material.Filled.ColorLens" Color="Color.Primary" Size="Size.Large" />
+                    </div>
+                    <div style="flex: 2;">
+                        <MudText Typo="Typo.h6">Accent Color</MudText>
+                        <MudText Typo="Typo.body2">Customize the accent color of the interface</MudText>
+                    </div>
+                </MudCardContent>
+                <MudCardActions>
+                    <MudButton Variant="Variant.Text" Color="Color.Primary">Select</MudButton>
+                </MudCardActions>
+            </MudCard>
+        </MudItem>
+        <MudItem xs="12" sm="6" md="3">
+            <MudCard Elevation="3" Class="h-100">
+                <MudCardContent Class="d-flex">
+                    <div style="flex: 1; max-width: 33%;" class="d-flex justify-center align-center mr-3">
+                        <MudIcon Icon="@Icons.Material.Filled.Dashboard" Color="Color.Warning" Size="Size.Large" />
+                    </div>
+                    <div style="flex: 2;">
+                        <MudText Typo="Typo.h6">Dashboard Layout</MudText>
+                        <MudText Typo="Typo.body2">Configure your dashboard widgets and layout</MudText>
+                    </div>
+                </MudCardContent>
+                <MudCardActions>
+                    <MudButton Variant="Variant.Text" Color="Color.Warning">Customize</MudButton>
+                </MudCardActions>
+            </MudCard>
+        </MudItem>
+    </MudGrid>
+</MudContainer>
+

@@ -1,27 +1,44 @@
 ﻿@page "/"
-@using Blazored.LocalStorage
-@using Microsoft.AspNetCore.Components.Authorization
 @using WithinBudget.Components
-@inject HttpClient Http
-@inject ILocalStorageService LocalStorage
-@inject AuthenticationStateProvider AuthStateProvider
-@inject NavigationManager Navigation
 
 <MudPaper Class="pa-4 mx-auto mt-12 border" Style="max-width:400px;">
-    <MudText Typo="Typo.h5">Login</MudText>
-    <MudTextField @bind-Value="_model.Email" Label="Email" Required="true" FullWidth="true" />
-    <MudTextField @bind-Value="_model.Password" Label="Password" InputType="InputType.Password" Required="true" FullWidth="true" />
-    
-    <MudButton OnClick="AttemptLogin" Color="Color.Primary" Variant="Variant.Filled" Class="mt-4" FullWidth="true">
-        Login
-    </MudButton>
-    
-    <MudText Class="mt-4">
-        Don't have an account? <MudLink Href="/Register">Register here</MudLink>.
-    </MudText>
+    <MudForm Model="@_model" @onsubmit="AttemptLogin">
+        <MudText Typo="Typo.h5">Login</MudText>
+        
+        <MudTextField 
+            @bind-Value="_model.Email" 
+            Label="Email" 
+            Required="true" 
+            FullWidth="true"
+            For="@(() => _model.Email)"
+            Error="@_errorMessages.ContainsKey(nameof(_model.Email))"
+            ErrorText="@(_errorMessages.TryGetValue(nameof(_model.Email), out var emailErrors) ? emailErrors[0] : string.Empty)"/>
+        
+        <MudTextField 
+            @bind-Value="_model.Password"
+            Label="Password" 
+            InputType="InputType.Password"
+            Required="true"
+            FullWidth="true"
+            For="@(() => _model.Password)"
+            Error="@_errorMessages.ContainsKey(nameof(_model.Password))"
+            ErrorText="@(_errorMessages.TryGetValue(nameof(_model.Password), out var passwordErrors) ? passwordErrors[0] : string.Empty)"/>
+
+        <MudButton ButtonType="ButtonType.Submit"
+                   Color="Color.Primary"
+                   Variant="Variant.Filled"
+                   Class="mt-4"
+                   FullWidth="true">
+            Login
+        </MudButton>
+
+        <MudText Class="mt-4">
+            Don't have an account? <MudLink Href="/Register">Register here</MudLink>.
+        </MudText>
+    </MudForm>
 </MudPaper>
 
-@if (_errorMessages.Errors.Any())
+@if (_errorMessages.Any(x => x.Key == string.Empty))
 {
-    <ApiErrorCard ApiError="_errorMessages" />
+    <ApiErrorCard Errors="_errorMessages" />
 }

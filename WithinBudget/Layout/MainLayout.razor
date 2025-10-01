@@ -32,14 +32,15 @@
         </MudNavMenu>
         
         <div class="mt-auto p-2" style="display: flex; align-items: center;">
+            <MudNavLink Href="/Settings" Icon="@Icons.Material.Filled.Settings">Settings</MudNavLink>
+            
             <MudTooltip Text="Toggle dark mode">
-                <MudIconButton 
+                <MudIconButton
                     Icon="@(_isDarkMode ? Icons.Material.Filled.DarkMode : Icons.Material.Filled.LightMode)"
                     Color="Color.Primary"
                     OnClick="ToggleDarkMode"
                     Size="Size.Medium"
-                    Edge="Edge.End"
-                />
+                    Edge="Edge.End"/>
             </MudTooltip>
             @if (_drawerOpen)
             {
