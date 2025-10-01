@@ -7,63 +7,87 @@
 
     <MudText Typo="Typo.h5" Class="mb-3">Setup MFA</MudText>
     
-    <div class="row">
-        <div class="col">
-            <MudText Typo="Typo.body1">Click the button below to generate your QR code.</MudText>
-        </div>
-    </div>
-    
-    <div class="row mt-3">
-        <div class="col">
-            <MudButton OnClick="GenerateQrCode" Color="Color.Primary" Variant="Variant.Filled">Generate QR Code</MudButton>
-        </div>
-    </div>
-    
-    @if (!string.IsNullOrEmpty(_mfaResponse?.QrCode))
+    @if (_mfaEnabled == null)
     {
-        <div class="row mt-3">
-            <div class="col">
-                <img src="@_mfaResponse.QrCode" alt="QR Code" style="width:200px; height:200px;" />
-            </div>
+        <div style="display:flex; justify-content:center; align-items:center; height:200px;">
+            <MudProgressCircular Indeterminate="true" Color="Color.Primary" Size="Size.Large" />
         </div>
-        
-        <div class="row mt-3">
+    }
+    
+    @if (_mfaEnabled == true)
+    {
+        <div class="row">
             <div class="col">
-                <MudText Typo="Typo.body1">Scan the QR code with your authenticator app and enter the one-time password.</MudText>
-            </div>
-        </div>
-        
-        <div class="row mt-3">
-            <div class="col-4">
-                <MudTextField Required="true" RequiredError="Please enter the OTP code" Label="Code" @bind-Value="@_otpCode" />
+                <MudText Typo="Typo.body1">MFA is currently enabled. Click the button below to disable it.</MudText>
             </div>
         </div>
         
         <div class="row mt-3">
             <div class="col">
-                <MudButton OnClick="VerifyMfa" Color="Color.Primary" Variant="Variant.Filled">Verify</MudButton>
+                <MudButton OnClick="DisableMfa" Color="Color.Error" Variant="Variant.Filled">Disable MFA</MudButton>
             </div>
         </div>
-        
-        @if (_verified)
+    }
+    else if (_mfaEnabled == false)
+    {
+        <div class="row">
+            <div class="col">
+                <MudText Typo="Typo.body1">Click the button below to generate your QR code.</MudText>
+            </div>
+        </div>
+    
+        <div class="row mt-3">
+            <div class="col">
+                <MudButton OnClick="GenerateQrCode" Color="Color.Primary" Variant="Variant.Filled">Generate QR Code</MudButton>
+            </div>
+        </div>
+    
+        @if (!string.IsNullOrEmpty(_mfaResponse?.QrCode))
         {
             <div class="row mt-3">
                 <div class="col">
-                    <MudText Typo="Typo.body1">
-                        <span>MFA is now enabled.</span>
-                    </MudText>
+                    <img src="@_mfaResponse.QrCode" alt="QR Code" style="width:200px; height:200px;" />
                 </div>
             </div>
-        }
-        else if (_confirmationError != null)
-        {
+        
             <div class="row mt-3">
                 <div class="col">
-                    <MudText Typo="Typo.body1">
-                        @_confirmationError
-                    </MudText>
+                    <MudText Typo="Typo.body1">Scan the QR code with your authenticator app and enter the one-time password.</MudText>
                 </div>
             </div>
+        
+            <div class="row mt-3">
+                <div class="col-4">
+                    <MudTextField Required="true" RequiredError="Please enter the OTP code" Label="Code" @bind-Value="@_otpCode" />
+                </div>
+            </div>
+        
+            <div class="row mt-3">
+                <div class="col">
+                    <MudButton OnClick="VerifyMfa" Color="Color.Primary" Variant="Variant.Filled">Verify</MudButton>
+                </div>
+            </div>
+        
+            @if (_verified)
+            {
+                <div class="row mt-3">
+                    <div class="col">
+                        <MudText Typo="Typo.body1">
+                            <span>MFA is now enabled.</span>
+                        </MudText>
+                    </div>
+                </div>
+            }
+            else if (_confirmationError != null)
+            {
+                <div class="row mt-3">
+                    <div class="col">
+                        <MudText Typo="Typo.body1">
+                            @_confirmationError
+                        </MudText>
+                    </div>
+                </div>
+            }
         }
     }
 </MudContainer>

@@ -30,8 +30,7 @@ public class ConfirmMfaSetup(UserManager<User> userManager, IConfiguration confi
             return BadRequest(new { Error = "Invalid code" });
         }
 
-        user.TwoFactorEnabled = true;
-        await userManager.UpdateAsync(user);
+        await userManager.SetTwoFactorEnabledAsync(user, true);
 
         return Ok();
     }

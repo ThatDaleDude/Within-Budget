@@ -11,22 +11,31 @@ public partial class SetupMfa : ComponentBase
     [Inject] private HttpClient Http { get; set; } = null!;
     
     private SetupMfaResponse? _mfaResponse;
+    private bool? _mfaEnabled;
     private string _otpCode = "";
     private string? _confirmationError;
     private bool _verified;
+    private string _userEmail = "";
     
-    private async Task GenerateQrCode()
+    protected override async Task OnInitializedAsync()
     {
         var authState = await AuthenticationStateTask;
         var user = authState.User;
-
+        
         if (user.Identity?.IsAuthenticated != true)
         {
             return;
         }
         
-        var email = user.FindFirst(x => x.Type == "email")?.Value;
-        var response = await Http.PostAsJsonAsync("/mfa/setup", email);
+        _userEmail = user.FindFirst(x => x.Type == "email")?.Value ?? "";
+        var response = await Http.GetAsync($"mfa/status/{_userEmail}");
+
+        _mfaEnabled = await response.Content.ReadFromJsonAsync<bool>();
+    }
+    
+    private async Task GenerateQrCode()
+    {
+        var response = await Http.PostAsJsonAsync("/mfa/setup", _userEmail);
 
         if (!response.IsSuccessStatusCode)
         {
@@ -53,5 +62,15 @@ public partial class SetupMfa : ComponentBase
         
         var apiError = await response.Content.ReadFromJsonAsync<ApiError>();
         _confirmationError = apiError?.Error;
+    }
+
+    private async Task DisableMfa()
+    {
+        var response = await Http.PostAsJsonAsync("mfa/disable", _userEmail);
+        
+        if (response.IsSuccessStatusCode)
+        {
+            _mfaEnabled = false;
+        }
     }
 }
