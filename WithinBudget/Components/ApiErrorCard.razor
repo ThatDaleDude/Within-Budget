@@ -23,4 +23,9 @@
             </div>
         </div>
     }
+    
+    @if (!string.IsNullOrEmpty(Error))
+    {
+        <MudText>@Error</MudText>
+    }
 </MudPaper>

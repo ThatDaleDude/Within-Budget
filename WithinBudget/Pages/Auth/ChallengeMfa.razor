@@ -1,0 +1,30 @@
+﻿@page "/ChallengeMfa/{UserId:guid}"
+@using WithinBudget.Components
+
+<MudPaper Class="pa-4 mx-auto mt-12 border" Style="max-width:400px;">
+    <MudText Typo="Typo.h5">Login</MudText>
+        
+    <MudText Typo="Typo.body1">
+        Please enter the code from your authenticator app.
+    </MudText>
+    
+    <MudTextField 
+        @bind-Value="_model.Code" 
+        Label="Code" 
+        Required="true" 
+        FullWidth="true" />
+    
+    <MudButton ButtonType="ButtonType.Submit"
+               Color="Color.Primary"
+               Variant="Variant.Filled"
+               Class="mt-4"
+               FullWidth="true"
+               OnClick="SubmitChallenge">
+        Submit
+    </MudButton>
+    
+    @if (!string.IsNullOrEmpty(_confirmationError))
+    {
+        <ApiErrorCard Error="@_confirmationError" />
+    }
+</MudPaper>

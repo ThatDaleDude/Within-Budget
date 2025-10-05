@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using WithinBudget.Infrastructure;
 using WithinBudget.Shared;
+using WithinBudget.Shared.Login;
 
 namespace WithinBudget.Pages.Auth;
 
@@ -36,12 +37,8 @@ public partial class Login : ComponentBase
 
         if (response.IsSuccessStatusCode)
         {
-            var token = await response.Content.ReadAsStringAsync();
-            await LocalStorage.SetItemAsStringAsync("authToken", token);
-
-            var customProvider = AuthStateProvider as CustomAuthStateProvider;
-            customProvider?.MarkUserAsAuthenticated(token);
-            Navigation.NavigateTo("/Profile", forceLoad: true);
+            var model = await response.Content.ReadFromJsonAsync<LoginUserResponse>();
+            await SetTokenAndLogin(model);
 
             return;
         }
@@ -62,6 +59,28 @@ public partial class Login : ComponentBase
                 { "", [content] }
             };
         }
+    }
+
+    private async Task SetTokenAndLogin(LoginUserResponse? model)
+    {
+        if (model == null)
+        {
+            return;
+        }
+
+        if (model.ChallengeMfa)
+        {
+            Navigation.NavigateTo($"/ChallengeMfa/{model.UserId}");
+            return;
+        }
+        
+        // TODO: Store this differently. It's bad practice to store sensitive data in local storage.
+        await LocalStorage.SetItemAsStringAsync("authToken", model.Token!);
+        
+        var customProvider = AuthStateProvider as CustomAuthStateProvider;
+        customProvider?.MarkUserAsAuthenticated(model.Token!);
+        
+        Navigation.NavigateTo("/Profile", forceLoad: true);
     }
     
     private void TogglePasswordVisibility() => _showPassword = !_showPassword;

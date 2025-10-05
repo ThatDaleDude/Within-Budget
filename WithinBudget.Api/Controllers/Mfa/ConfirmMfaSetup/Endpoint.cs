@@ -8,7 +8,7 @@ namespace WithinBudget.Api.Controllers.Mfa.ConfirmMfaSetup;
 [ApiController]
 [Authorize]
 [Route("mfa")]
-public class ConfirmMfaSetup(UserManager<User> userManager, IConfiguration config) : ControllerBase
+public class ConfirmMfaSetup(UserManager<User> userManager) : ControllerBase
 {
     [HttpPost("confirm/{code}")]
     public async Task<IActionResult> PostAsync([FromRoute] string code)

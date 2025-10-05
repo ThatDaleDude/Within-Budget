@@ -1,4 +1,4 @@
-﻿namespace WithinBudget.Shared;
+﻿namespace WithinBudget.Shared.Login;
 
 public class LoginModel
 {
