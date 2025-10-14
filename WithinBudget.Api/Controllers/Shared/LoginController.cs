@@ -6,7 +6,7 @@ namespace WithinBudget.Api.Controllers.Shared;
 
 public abstract class LoginController : ControllerBase
 {
-    public void GenerateAuthToken(User user, string key, string issuer)
+    protected void GenerateAuthToken(User user, string key, string issuer)
     {
         var token = JwtTokenGenerator.GenerateToken(user, key, issuer);
         

@@ -1,4 +1,5 @@
 using System.Net.Http.Json;
+using System.Security.Claims;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using WithinBudget.Shared;
@@ -27,7 +28,7 @@ public partial class SetupMfa : ComponentBase
             return;
         }
         
-        _userEmail = user.FindFirst(x => x.Type == "email")?.Value ?? "";
+        _userEmail = user.FindFirst(x => x.Type == ClaimTypes.Email)?.Value ?? "";
         var response = await Http.GetAsync($"mfa/status/{_userEmail}");
 
         _mfaEnabled = await response.Content.ReadFromJsonAsync<bool>();
