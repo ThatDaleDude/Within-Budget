@@ -30,7 +30,15 @@ public class ChallengeMfa(UserManager<User> userManager, IConfiguration config) 
         }
         
         var token = JwtTokenGenerator.GenerateToken(user, config["Jwt:Key"]!, config["Jwt:Issuer"]!);
+        
+        Response.Cookies.Append("AuthToken", token, new CookieOptions
+        {
+            HttpOnly = true,
+            Secure   = true,
+            SameSite = SameSiteMode.Strict,
+            Expires  = DateTime.UtcNow.AddHours(1)
+        });
 
-        return Ok(token);
+        return Ok();
     }
 }

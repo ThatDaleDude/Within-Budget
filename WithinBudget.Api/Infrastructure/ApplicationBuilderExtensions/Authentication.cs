@@ -38,6 +38,13 @@ public static class Authentication
                     IssuerSigningKey         = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey!)),
                     ValidateIssuerSigningKey = true
                 };
+
+                options.Events = new JwtBearerEvents
+                {
+                    OnMessageReceived = context => context.Request.Cookies.TryGetValue("AuthToken", out var token)
+                        ? Task.FromResult(context.Token = token)
+                        : Task.CompletedTask
+                };
             });
 
         return builder;

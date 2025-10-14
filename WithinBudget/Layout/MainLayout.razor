@@ -1,9 +1,6 @@
-﻿@using Blazored.LocalStorage
-@using Microsoft.AspNetCore.Components.Authorization
+﻿@using Microsoft.AspNetCore.Components.Authorization
+@using WithinBudget.Infrastructure
 @inherits LayoutComponentBase
-@inject NavigationManager Navigation
-@inject AuthenticationStateProvider AuthStateProvider
-@inject ILocalStorageService LocalStorage
 
 @* Required *@
 <MudThemeProvider @ref="_mudThemeProvider" @bind-IsDarkMode="_isDarkMode" />
@@ -65,6 +62,9 @@
 </MudLayout>
 
 @code {
+    [Inject] private AuthenticationStateProvider AuthStateProvider { get; set; } = null!;
+    [Inject] private NavigationManager Navigation { get; set; } = null!;
+    
     private bool _drawerOpen = true;
     private bool _isAuthenticated;
     private bool _isDarkMode;
@@ -93,7 +93,8 @@
 
     private void Logout()
     {
-        LocalStorage.RemoveItemAsync("authToken");
+        var customAuthProvider = AuthStateProvider as CustomAuthStateProvider;
+        customAuthProvider?.MarkUserAsLoggedOut();
 
         // Navigate back to login
         Navigation.NavigateTo("/", forceLoad: true);

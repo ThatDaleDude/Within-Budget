@@ -1,6 +1,5 @@
 ﻿using System.Net.Http.Json;
 using System.Text.Json;
-using Blazored.LocalStorage;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using WithinBudget.Infrastructure;
@@ -12,7 +11,6 @@ namespace WithinBudget.Pages.Auth;
 public partial class Login : ComponentBase
 {
     [Inject] private HttpClient Http { get; set; } = null!;
-    [Inject] private ILocalStorageService LocalStorage { get; set; } = null!;
     [Inject] private AuthenticationStateProvider AuthStateProvider { get; set; } = null!;
     [Inject] private NavigationManager Navigation { get; set; } = null!;
     
@@ -38,7 +36,7 @@ public partial class Login : ComponentBase
         if (response.IsSuccessStatusCode)
         {
             var model = await response.Content.ReadFromJsonAsync<LoginUserResponse>();
-            await SetTokenAndLogin(model);
+            SetTokenAndLogin(model);
 
             return;
         }
@@ -61,7 +59,7 @@ public partial class Login : ComponentBase
         }
     }
 
-    private async Task SetTokenAndLogin(LoginUserResponse? model)
+    private void SetTokenAndLogin(LoginUserResponse? model)
     {
         if (model == null)
         {
@@ -74,11 +72,8 @@ public partial class Login : ComponentBase
             return;
         }
         
-        // TODO: Store this differently. It's bad practice to store sensitive data in local storage.
-        await LocalStorage.SetItemAsStringAsync("authToken", model.Token!);
-        
         var customProvider = AuthStateProvider as CustomAuthStateProvider;
-        customProvider?.MarkUserAsAuthenticated(model.Token!);
+        customProvider?.MarkUserAsAuthenticated();
         
         Navigation.NavigateTo("/Profile", forceLoad: true);
     }

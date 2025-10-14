@@ -13,6 +13,7 @@ builder.Services.AddCors(options =>
     options.AddPolicy("AllowBlazorClient", policy =>
     {
         policy.WithOrigins(builder.Configuration["WithinBudgetUri"]!)
+            .AllowCredentials()
             .AllowAnyHeader()
             .AllowAnyMethod();
     });

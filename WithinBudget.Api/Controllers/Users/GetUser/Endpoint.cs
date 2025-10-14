@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using WithinBudget.Api.Data.Entities;
+using WithinBudget.Shared;
 
 namespace WithinBudget.Api.Controllers.Users.GetUser;
 
@@ -28,12 +29,10 @@ public class GetUser(UserManager<User> userManager) : ControllerBase
             return NotFound();
         }
 
-        return Ok(new
+        return Ok(new UserModel
         {
-            user.Id,
-            user.Email,
-            user.FirstName,
-            user.LastName
+            Id    = user.Id,
+            Email = user.Email
         });
     }
 }

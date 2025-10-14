@@ -43,7 +43,15 @@ public class LogInUser(UserManager<User> userManager, IConfiguration config) : C
         }
 
         var token = JwtTokenGenerator.GenerateToken(user, config["Jwt:Key"]!, config["Jwt:Issuer"]!);
+        
+        Response.Cookies.Append("AuthToken", token, new CookieOptions
+        {
+            HttpOnly = true,
+            Secure = true,
+            SameSite = SameSiteMode.Strict,
+            Expires = DateTime.UtcNow.AddHours(1)
+        });
 
-        return Ok(new LoginUserResponse { Token = token });
+        return Ok(new LoginUserResponse { UserId = user.Id });
     }
 }

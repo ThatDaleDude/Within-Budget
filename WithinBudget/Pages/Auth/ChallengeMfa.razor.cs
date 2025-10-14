@@ -1,5 +1,4 @@
 ﻿using System.Net.Http.Json;
-using Blazored.LocalStorage;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using WithinBudget.Infrastructure;
@@ -11,7 +10,6 @@ namespace WithinBudget.Pages.Auth;
 public partial class ChallengeMfa : ComponentBase
 {
     [Inject] private HttpClient Http { get; set; } = null!;
-    [Inject] private ILocalStorageService LocalStorage { get; set; } = null!;
     [Inject] private AuthenticationStateProvider AuthStateProvider { get; set; } = null!;
     [Inject] private NavigationManager Navigation { get; set; } = null!;
 
@@ -33,12 +31,8 @@ public partial class ChallengeMfa : ComponentBase
             return;
         }
 
-        var token = await response.Content.ReadAsStringAsync();
-        
-        await LocalStorage.SetItemAsStringAsync("authToken", token);
-        
         var customProvider = AuthStateProvider as CustomAuthStateProvider;
-        customProvider?.MarkUserAsAuthenticated(token);
+        customProvider?.MarkUserAsAuthenticated();
         
         Navigation.NavigateTo("/Profile", forceLoad: true);
     }

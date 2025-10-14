@@ -1,5 +1,6 @@
 ﻿@page "/Profile"
 @attribute [Authorize]
+@using System.Security.Claims
 @using Microsoft.AspNetCore.Authorization
 @using Microsoft.AspNetCore.Components.Authorization
 
@@ -23,8 +24,8 @@
 
         if (user.Identity?.IsAuthenticated == true)
         {
-            _userEmail = user.FindFirst(x => x.Type == "email")?.Value;
-            _userId    = user.FindFirst(x => x.Type == "sub")?.Value;
+            _userEmail = user.FindFirst(x => x.Type == ClaimTypes.Email)?.Value;
+            _userId    = user.FindFirst(x => x.Type == ClaimTypes.NameIdentifier)?.Value;
         }
     }
 }

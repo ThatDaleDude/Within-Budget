@@ -1,60 +1,57 @@
-﻿using System.Security.Claims;
-using System.Text.Json;
-using Blazored.LocalStorage;
+﻿using System.Net.Http.Json;
+using System.Security.Claims;
 using Microsoft.AspNetCore.Components.Authorization;
+using WithinBudget.Shared;
 
 namespace WithinBudget.Infrastructure;
 
-public class CustomAuthStateProvider(ILocalStorageService localStorage) : AuthenticationStateProvider
+public class CustomAuthStateProvider(HttpClient client, ILogger<CustomAuthStateProvider> logger) : AuthenticationStateProvider
 {
     private readonly ClaimsPrincipal _anonymous = new(new ClaimsIdentity());
     
     public override async Task<AuthenticationState> GetAuthenticationStateAsync()
     {
-        var token = await localStorage.GetItemAsStringAsync("authToken");
+        var response = await client.GetAsync("/user/profile");
 
-        if (string.IsNullOrWhiteSpace(token))
+        if (!response.IsSuccessStatusCode)
         {
             return new AuthenticationState(_anonymous);
         }
 
         try
         {
-            var identity = new ClaimsIdentity(ParseClaimsFromJwt(token), "jwt");
+            var userModel = await response.Content.ReadFromJsonAsync<UserModel>();
+
+            if (userModel == null)
+            {
+                return new AuthenticationState(_anonymous);
+            }
+            
+            var claims = new[]
+            {
+                new Claim(ClaimTypes.NameIdentifier, userModel.Id.ToString()),
+                new Claim(ClaimTypes.Email, userModel.Email ?? "")
+            };
+            
+            var identity = new ClaimsIdentity(claims, "serverAuth");
             var user = new ClaimsPrincipal(identity);
             
             return new AuthenticationState(user);
         }
         catch
         {
+            logger.LogError("Failed to parse user profile");
             return new AuthenticationState(_anonymous);
         }
     }
 
-    public void MarkUserAsAuthenticated(string token)
-    {
-        var identity = new ClaimsIdentity(ParseClaimsFromJwt(token), "jwt");
-        var user = new ClaimsPrincipal(identity);
+    public void MarkUserAsAuthenticated() => NotifyAuthenticationStateChanged(GetAuthenticationStateAsync());
 
-        var authState = Task.FromResult(new AuthenticationState(user));
-        NotifyAuthenticationStateChanged(authState);
-    }
-
-    public void MarkUserAsLoggedOut()
+    public async Task MarkUserAsLoggedOut()
     {
+        await client.PostAsync("user/logout", null);
+        
         var authState = Task.FromResult(new AuthenticationState(_anonymous));
         NotifyAuthenticationStateChanged(authState);
     }
-
-    private static IEnumerable<Claim> ParseClaimsFromJwt(string jwt)
-    {
-        var payload = jwt.Split('.')[1];
-        var jsonBytes = Convert.FromBase64String(PadBase64(payload));
-        var keyValuePairs = JsonSerializer.Deserialize<Dictionary<string, object>>(jsonBytes);
-
-        return keyValuePairs?.Select(kvp => new Claim(kvp.Key, kvp.Value.ToString()!)) ?? [];
-    }
-    
-    private static string PadBase64(string base64) =>
-        base64.PadRight(base64.Length + (4 - base64.Length % 4) % 4, '=');
 }
