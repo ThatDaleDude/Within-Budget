@@ -1,14 +1,14 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using WithinBudget.Api.Controllers.Shared;
 using WithinBudget.Api.Data.Entities;
-using WithinBudget.Api.Infrastructure.Authentication;
 using WithinBudget.Shared.Login;
 
 namespace WithinBudget.Api.Controllers.Users.LogInUser;
 
 [ApiController]
 [Route("user")]
-public class LogInUser(UserManager<User> userManager, IConfiguration config) : ControllerBase
+public class LogInUser(UserManager<User> userManager, IConfiguration config) : LoginController
 {
     [HttpPost("login")]
     public async Task<IActionResult> PostAsync([FromBody] CommandCriteria command)
@@ -42,16 +42,7 @@ public class LogInUser(UserManager<User> userManager, IConfiguration config) : C
             });
         }
 
-        var token = JwtTokenGenerator.GenerateToken(user, config["Jwt:Key"]!, config["Jwt:Issuer"]!);
-        
-        Response.Cookies.Append("AuthToken", token, new CookieOptions
-        {
-            HttpOnly = true,
-            Secure = true,
-            SameSite = SameSiteMode.Strict,
-            Expires = DateTime.UtcNow.AddHours(1)
-        });
-
+        GenerateAuthToken(user, config["Jwt:Key"]!, config["Jwt:Issuer"]!);
         return Ok(new LoginUserResponse { UserId = user.Id });
     }
 }

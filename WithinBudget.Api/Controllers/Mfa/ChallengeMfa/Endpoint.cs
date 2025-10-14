@@ -1,13 +1,14 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using WithinBudget.Api.Controllers.Shared;
 using WithinBudget.Api.Data.Entities;
-using WithinBudget.Api.Infrastructure.Authentication;
+using WithinBudget.Shared.Login;
 
 namespace WithinBudget.Api.Controllers.Mfa.ChallengeMfa;
 
 [ApiController]
 [Route("mfa")]
-public class ChallengeMfa(UserManager<User> userManager, IConfiguration config) : ControllerBase
+public class ChallengeMfa(UserManager<User> userManager, IConfiguration config) : LoginController
 {
     [HttpPost("challenge")]
     public async Task<IActionResult> PostAsync([FromBody] CommandCriteria command)
@@ -29,16 +30,7 @@ public class ChallengeMfa(UserManager<User> userManager, IConfiguration config) 
             return BadRequest(new { Error = "Invalid code" });
         }
         
-        var token = JwtTokenGenerator.GenerateToken(user, config["Jwt:Key"]!, config["Jwt:Issuer"]!);
-        
-        Response.Cookies.Append("AuthToken", token, new CookieOptions
-        {
-            HttpOnly = true,
-            Secure   = true,
-            SameSite = SameSiteMode.Strict,
-            Expires  = DateTime.UtcNow.AddHours(1)
-        });
-
-        return Ok();
+        GenerateAuthToken(user, config["Jwt:Key"]!, config["Jwt:Issuer"]!);
+        return Ok(new LoginUserResponse { UserId = user.Id });
     }
 }
