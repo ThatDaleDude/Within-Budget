@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using WithinBudget.Api.Controllers.Shared;
 using WithinBudget.Api.Data.Entities;
@@ -20,12 +20,12 @@ public class LogInUser(UserManager<User> userManager, IConfiguration config) : L
             return Unauthorized("Invalid email or password.");
         }
 
-        var isPasswordValid = await userManager.CheckPasswordAsync(user, command.Password);
-        
         if (await userManager.IsLockedOutAsync(user))
         {
             return Unauthorized("User is temporarily locked out.");
         }
+
+        var isPasswordValid = await userManager.CheckPasswordAsync(user, command.Password);
         
         if (!isPasswordValid)
         {
